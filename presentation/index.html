@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Global Azure Bootcamp 2015</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<script>
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+		
+		<style type="text/css">
+			.reveal section img { border: none; box-shadow: none; }
+		</style>
+		
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-background-size="250px" data-background-position="top right">
+					<h1>Docker on Azure Hands-on Lab</h1>
+				</section>
+
+				<section data-background-size="250px" data-background-position="top right">
+					<section><h1>Agenda</h1></section>
+					<section>
+						<h2>Hands-on walk-through</h2>
+						<ul>
+							<li>Docker for Developers</li>
+							<li>Docker Overview</li>
+							<li>Creating a Docker VM on Azure</li>
+							<li>Creating an ASP.NET vNext image</li>
+							<li>Running the bits</li>
+							<li>More hands-on</li>
+						</ul>
+					</section>
+				</section>	
+				
+				<section data-background-size="250px" data-background-position="top right">
+					<section><h1>Docker for Developers</h1></section>
+					<section>
+						<h2>Docker Daemon</h2>
+						<em>Does the heavy lifting of building, running, <br/>and distributing your Docker containers</em>
+					</section>
+					<section>
+						<h2>Docker Client</h2>
+						<em>Runs on your machine</em>
+						<p>It connects to the docker daemon, <br/>ie.$ docker pull or $ docker run</p>
+					</section>
+					<section>
+						<h2>Docker Images</h2>
+						<em>Docker images are the blueprints for your applications</em>
+					</section>
+					<section>
+						<h2>Docker Containers</h2>
+						<em>Containers are created from docker images, and they are the real instances of our containers/lego bricks</em><br/><br/>
+						<em>They can be started, run, stopped, deleted, and moved</em>
+					</section>
+					<section>
+						<h2>Docker Hub (registry)</h2>
+						<em>A Docker Registry is a hosted registry server <br/>that can hold Docker Images</em>
+					</section>
+				</section>
+				
+				<section data-background-size="250px" data-background-position="top right">
+					<section><h1>Docker Overview</h1></section>
+					<section><img src="images/Docker-Machine-Compose-Swarm.png"/></section>
+					<section>
+						<h2>Machine</h2>
+						<em><a href="http://docs.docker.com/machine/" target="_blank">Machine</a> lets you create Docker hosts on your computer, on cloud providers, and inside your own data center. It creates servers, installs Docker on them, then configures the Docker client to talk to them.</em>
+					</section>
+					<section>
+						<h2>Compose</h2>
+						<em><a href="http://docs.docker.com/compose/" target="_blank">Compose</a> is a tool for defining and <br/>running complex applications with Docker</em>
+					</section>
+					<section>
+						<h2>Swarm</h2>
+						<em><a href="http://docs.docker.com/swarm/" target="_blank">Swarm</a> is native clustering for Docker. <br/>It turns a pool of Docker hosts into a single, virtual host</em>
+					</section>
+				</section>
+				
+				<section data-background-size="250px" data-background-position="top right">
+					<section><h1>Creating a Docker VM on Azure</h1></section>
+					<section><h2>Use the Azure Preview Portal</h2></section>
+					<section>
+						<h2>Use the Azure xPlat CLI</h2>
+						<a href="http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-docker-with-xplat-cli/" target="_blank">How-to article </a> ...
+					</section>
+					<section>
+						<h2>Use Docker Machine</h2>
+						<a href="http://docs.docker.com/machine/#microsoft-azure" target="_blank">Azure Driver</a>
+					</section>
+				</section>
+				
+				<section data-background-size="250px" data-background-position="top right" data-background="images/bootcamp-250x169.png">
+					<section><h1>Creating an ASP.NET vNext image</h1></section>
+					<section>
+						<h2>Using the Official ASP.NET image</h2>
+						<em>Available on the <a href="https://registry.hub.docker.com/u/microsoft/aspnet/" target="_blank">docker hub</a></em>
+					</section>
+					<section>
+						<h2>ASP.NET vNext Beta 6</h2>
+						<em>Using one of the samples from <a href="https://github.com/aspnet/Home/tree/master" target="_blank">github.com/aspnet/Home</a> .</em><br/><br/>
+						<em><small>Dev branch includes beta6</small></em>
+					</section>
+					<section><h3>dockerfile</h3><pre>
+					
+FROM microsoft/aspnet
+
+COPY . /app
+WORKDIR /app
+RUN ["dnu", "restore"]
+
+EXPOSE 5004
+ENTRYPOINT ["dnx", ".", "kestrel"]
+					</pre></section>
+					<section><h3>Build the dockerfile</h3><pre>
+					
+docker build -t myapp .
+					</pre></section>
+				</section>
+				
+				<section data-background-size="250px" data-background-position="top right">
+					<section><h1>Running the bits</h1></section>
+					<section><h3>Running the container</h3><pre>
+					
+docker run -t -d -p 80:5004 myapp
+					</pre></section>
+					<section><h3>Article reference</h3><a href="http://blogs.msdn.com/b/webdev/archive/2015/01/14/running-asp-net-5-applications-in-linux-containers-with-docker.aspx">Running ASP.NET 5 applications in <br/>Linux Containers with Docker</a> </section>
+				</section>
+				
+				<section data-background-size="250px" data-background-position="top right" data-background="images/bootcamp-250x169.png">
+					<section><h1>More hands-on</h1></section>
+					<section>
+						<h2>Create docker hosts with Azure Virtual Machines</h2>
+						<em><a href="http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-docker-swarm/" target="_blank">How to use docker with swarm</a></em>
+					</section>
+				</section>
+
+				<section data-background-size="250px" data-background-position="top right">
+					<h2>Questions?</h2>
+					<ul>
+						<li>Morten Christensen</li>
+						<li>@sitereactor</li>
+						<li><a href="">mc@sitereactor.dk</a></li>					
+					</ul>
+				</section>				
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme || 'gwab', // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
