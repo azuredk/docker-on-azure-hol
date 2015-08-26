@@ -6,7 +6,7 @@ In this section we'll mostly dive into building our own image, but its highly re
 
 ##Building a Dockerfile
 
-So lets start off by building a simply image. We'll do this by creating a `Dockerfile` that contains
+So lets start off by building a simple image. We'll do this by creating a `Dockerfile` that contains
 a set of instructions that tells Docker how to build our image.
 
 First we need to create a directory with a `Dockerfile` in it.
@@ -33,7 +33,7 @@ The first instruction `FROM` tells Docker what we want to base our image on, and
 The `MAINTAINER` part is just meta data, which tells others (reading the Dockerfile) who maintains this image.
 
 Finally we have two `RUN` instructions. Each of these executes a command inside the image, which is commonly used to install packages.
-In the example above we are updating the APT cahce, installing Ruby and RubyGems, and then the next `RUN` instruction installs sinatra using `gem install`.
+In the example above we are updating the APT cache, installing Ruby and RubyGems, and then the next `RUN` instruction installs sinatra using `gem install`.
 
 > There are a lot of instructions available to use in a Dockerfile, so its a good idea to checkout the [reference documentation for Dockerfiles](https://docs.docker.com/reference/builder).
 

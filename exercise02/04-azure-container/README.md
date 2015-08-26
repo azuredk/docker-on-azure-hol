@@ -1,8 +1,9 @@
 #Starting a Container on Azure
 
-Now that we a virtual machine running with Docker on Azure we can test it out by running a Container. We'll use our local Docker client in doing so.
+Now that we have a virtual machine running with Docker on Azure we can test it out by running a Container. 
+We'll use our local Docker client in doing so.
 
-The easiest way to verify that the Docker host is running and functional on Azure is to use [busybox](https://registry.hub.docker.com/_/busybox/):
+The easiest way to verify that the Docker host is running and functional on Azure is to use [busybox](https://registry.hub.docker.com/_/busybox/) for creating a "Hello World" Container:
 ```
 $  docker run busybox echo hello world
 ```
@@ -46,6 +47,6 @@ info:    Executing command vm endpoint create
 + Updating network configuration
 info:    vm endpoint create command OK
 ```
-Open a browser and go to machine-name.cloudapp.net and you should see the nginx welcome page.
+Open a browser and go to machine-name.cloudapp.net url and you should see the nginx welcome page.
 
 That's it for now. You can of course stop and remove these containers and images as we won't be using them again.

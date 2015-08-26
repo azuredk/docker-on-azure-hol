@@ -25,7 +25,8 @@ If not then go to [nodejs.org/download](https://nodejs.org/download/) and downlo
 
 ##Using Docker Container
 
-The third option of installing the Azure CLI is to use a Docker container. And since we have a virtual machine with 
-Ubuntu and Docker this might be the easiest way of getting the CLI up and running.
+The third option of installing the Azure CLI is to use a Docker container. If you created a private lab with Ubuntu and Docker 
+in a virtual machine this might be the easiest way of getting the CLI up and running. 
+But even if you creatd a VM with Docker on Azure, you can also use this approach for installing the Azure CLI as a Container.
 
 In a Docker host run the following command `docker run -it microsoft/azure-cli`. 

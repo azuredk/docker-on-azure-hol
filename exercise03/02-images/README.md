@@ -63,7 +63,7 @@ If we wanted to pull down the official Microsoft ASP.NET 5 image we could use th
 $ docker pull microsoft/aspnet
 ```
 
-We can now run the image locally within our virtual machine like so:
+We can now run the image on our Azure VM or locally within our virtual machine (from the private lab) like so:
 ```
 $ docker run -t -i microsoft/aspnet /bin/bash
 ```
@@ -77,14 +77,14 @@ Since we'll be diving into Dockerfiles in the next section we'll
 look at commiting changes to an image here.
 
 To update an image we first need to create a container from the 
-image we’d like to update.
+image we'd like to update.
 
 ```
 $ docker run -t -i microsoft/aspnet /bin/bash
 root@0b2616b0e5a8:/#
 ```
 
->**Note:** Take note of the container ID that has been created, `0b2616b0e5a8`, as we’ll need it in a moment.
+>**Note:** Take note of the container ID that has been created, `0b2616b0e5a8`, as we'll need it in a moment (this is the short id of the container).
 
 Inside our running container we can add a few files or install something using `apt-get`. 
 For simplicity we'll just create a few files, and once that is done we'll exit our container using the `exit` command.
@@ -99,12 +99,12 @@ $ docker commit -m "Added json files" -a "Morten Christensen" \
 4f177bd27a9ff0f6dc2a830403925b5360bfe0b93d476f7fc3231110e7f71b1c
 ```
 
-Here we’ve used the docker commit command. We’ve specified two flags: 
+Here we've used the docker commit command. We've specified two flags: 
 `-m` flag which allows us to specify a commit message, 
 and the `-a` flag which allows us to specify an author for our update.
 
-We’ve also specified the container we want to create this new image from, 
-`0b2616b0e5a8` (the Id we noted earlier) and we’ve specified a target for the image as well:
+We've also specified the container we want to create this new image from, 
+`0b2616b0e5a8` (the Id we noted earlier) and we've specified a target for the image as well:
 
 ```
 ouruser/aspnet:v2

@@ -12,9 +12,16 @@ $ openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mycert.pem -out my
 $ openssl pkcs12 -export -out mycert.pfx -in mycert.pem -name "My Certificate"
 ```
 
+>Note: If you get this error "unable to load config info from /usr/local/ssl/openssl.cnf" you might need to specify the absolute path to the openssl config file located in your git folder "C:\Program Files (x86)\Git\ssl\openssl.cnf", and this should be appended at the end of the first command above along with `-config`. So you would enter `openssl` form your git prompt and then `req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mycert.pem -out mycert.pem -config "C:\Program Files (x86)\Git\ssl\openssl.cnf"`
+
 Next, enter the export password for your certificate and capture it for future usage. Then type the following command:
 ```
 $ openssl x509 -inform pem -in mycert.pem -outform der -out mycert.cer
+```
+
+As an alternative to openssl you can also use `makecert` if you have that available - possibly through a Visual Studio Developer Command Prompt.
+```
+makecert -sky exchange -r -n "CN=<CertificateName>" -pe -a sha1 -len 2048 -ss My "<CertificateName>.cer"
 ```
 
 Now upload your certificate's .cer file to Azure. In the [Azure Portal](https://manage.windowsazure.com/), click Settings in the bottom left of the service area (shown below).

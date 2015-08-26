@@ -1,6 +1,6 @@
 # ASP.NET 6 beta6 Container on Azure
 
-Back in exercise 2 part 3 we looked at the Dockerfile for the microsoft/aspnet image, and how it was built up. In this exercise we'll
+Back in exercise 3 part 3 we looked at the Dockerfile for the microsoft/aspnet image, and how it was built up. In this exercise we'll
 build our own image around a sample ASP.NET 5 beta6 site, and deploy that to a container.
 
 First off we need a site. If you have Visual Studio 2015 and DNX (currently beta 6) installed then you can simply create a site using the default template.

@@ -18,8 +18,8 @@ $ docker ps
 # Lists all containers
 $ docker ps -a 
 ```
-If you followed the previous exercise you probably already have an Ubuntu image on your system. 
-If not, then you can pull down a pre-built ubuntu image with the following command
+If you created a private lab with Ubuntu in a virtual machine you probably already have an Ubuntu image on your system. 
+If not, then you can pull down a pre-built Ubuntu image with the following command
 ```
 $ docker pull ubuntu
 ``` 
