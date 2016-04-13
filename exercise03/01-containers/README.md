@@ -83,7 +83,7 @@ Let's create a long running container and assign it a name
 
 ```
 # Start a long running process
-$ docker run -d -name=my-ubuntu ubuntu /bin/sh -c "while true; do echo Hello world; sleep 1; done"
+$ docker run -d --name=my-ubuntu ubuntu /bin/sh -c "while true; do echo Hello world; sleep 1; done"
 
 # Collect the output of the job so far
 $ docker logs my-ubuntu
@@ -91,6 +91,9 @@ $ docker logs my-ubuntu
 # Kill the job
 $ docker kill my-ubuntu
 ```
+
+>Again, depending on the bash solution you're using, you might get an error like this: `Container command not found or does not exist`
+>For these commands we do as the previous, we make the `bin/sh` just a `sh`
 
 ## Inspecting our container
 
