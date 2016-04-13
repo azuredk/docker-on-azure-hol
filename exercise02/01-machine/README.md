@@ -49,10 +49,12 @@ Now everything should be in place for actually creating a virtual machine on Azu
 The shortest form of creating a virtual machine on Azure is using the following command, but please note that it will use a lot of defaults
 
 ```
-$ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-subscription-cert="mycert.pem" A-UNIQUE-NAME-FOR-YOUR-VM
+$ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-subscription-cert="mycert.pem" --azure-location="LOCATION" A-UNIQUE-NAME-FOR-YOUR-VM
 ```
 
 The `-d` flag is short-hand for driver, and is the part that tells Machine that we are using the Azure driver.
+
+>Valid locations are: "East US", "South Central US", "Central US", "North Europe", "West Europe", "Southeast Asia", "East Asia"
 
 >You can find all the subcommands in the [Docker Machine subcommands](https://docs.docker.com/machine/reference/) reference documentation.
 
