@@ -39,6 +39,8 @@ busybox:latest
 One thing to note about this is that these port will not be opened by Azure on the VM itself, so we need to do that as extra step in order to access nginx on port 80.
 
 Using the Azure CLI we can run the following command to open public port 80 to port 49153 on the VM. Docker then ensures that inbound tcp traffic on VM port 49153 is routed to the nginx container.
+>The port will probably be something else than 49153 - look at the output from `docker ps -a`command.
+
 ```
 $ azure vm endpoint create machine-name 80 49153
 info:    Executing command vm endpoint create

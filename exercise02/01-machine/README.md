@@ -49,10 +49,12 @@ Now everything should be in place for actually creating a virtual machine on Azu
 The shortest form of creating a virtual machine on Azure is using the following command, but please note that it will use a lot of defaults
 
 ```
-$ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-subscription-cert="mycert.pem" A-UNIQUE-NAME-FOR-YOUR-VM
+$ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-subscription-cert="mycert.pem" --azure-location="LOCATION" A-UNIQUE-NAME-FOR-YOUR-VM
 ```
 
 The `-d` flag is short-hand for driver, and is the part that tells Machine that we are using the Azure driver.
+
+>Valid locations are: "East US", "South Central US", "Central US", "North Europe", "West Europe", "Southeast Asia", "East Asia"
 
 >You can find all the subcommands in the [Docker Machine subcommands](https://docs.docker.com/machine/reference/) reference documentation.
 
@@ -73,37 +75,32 @@ Here is a list of environment variables and default values
 
 Given this information we can refine our creation, so we set the location and the size of the VM.
 
-In the following command we add "North Europe" as the location, and set "Medium" as the size of our VM.
+In the following command we add "West Europe" as the location, and set "Medium" as the size of our VM.
 ```
-$ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-subscription-cert="mycert.pem" --azure-location="North Europe" --azure-size="Medium" A-UNIQUE-NAME-FOR-YOUR-VM
+$ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-subscription-cert="mycert.pem" --azure-location="West Europe" --azure-size="Medium" A-UNIQUE-NAME-FOR-YOUR-VM
 ```
 
 After running the create command you should see an output similar to the following, which updates the VM after the creation.
 
 ```
-INFO[0001] Creating Azure machine...
-INFO[0049] Waiting for SSH...
-modprobe: FATAL: Module aufs not found.
-+ sudo -E sh -c sleep 3; apt-get update
-+ sudo -E sh -c sleep 3; apt-get install -y -q linux-image-extra-3.13.0-36-generic
-E: Unable to correct problems, you have held broken packages.
-modprobe: FATAL: Module aufs not found.
-Warning: tried to install linux-image-extra-3.13.0-36-generic (for AUFS)
- but we still have no AUFS.  Docker may not work. Proceeding anyways!
-+ sleep 10
-+ [ https://get.docker.com/ = https://get.docker.com/ ]
-+ sudo -E sh -c apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-gpg: requesting key A88D21E9 from hkp server keyserver.ubuntu.com
-gpg: key A88D21E9: public key "Docker Release Tool (releasedocker) <docker@dotcloud.com>" imported
-gpg: Total number processed: 1
-gpg:               imported: 1  (RSA: 1)
-+ sudo -E sh -c echo deb https://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list
-+ sudo -E sh -c sleep 3; apt-get update; apt-get install -y -q lxc-docker
-+ sudo -E sh -c docker version
-INFO[0368] "machine-name" has been created and is now the active machine.
-INFO[0368] To point your Docker client at it, run this in your shell: $(docker-machine env machine-name)
+Running pre-create checks...
+Creating machine...
+(YOUR_VM_NAME) Creating Azure machine...
+Waiting for machine to be running, this may take a few minutes...
+Detecting operating system of created instance...
+Waiting for SSH to be available...
+Detecting the provisioner...
+Provisioning with ubuntu(systemd)...
+Installing Docker...
+Copying certs to the local machine directory...
+Copying certs to the remote machine...
+Setting Docker configuration on the remote daemon...
+Checking connection to Docker...
+Docker is up and running!
+To see how to connect your Docker Client to the Docker Engine running on this virtual machine, run: <path to docker-machine>\docker-machine.exe env YOUR_VM_NAME
 ```
 
-Please note the last line with `$(docker-machine env machine-name)`, which is what we'll use to set access to the newly created VM from the current terminal session (command prompt).
+Please note the last line with `<path to docker-machine>\docker-machine.exe env YOUR_VM_NAME`, which is what we'll use to set access to the newly created VM from the current terminal session (command prompt).
+Prepend eval and run it as follows: `eval $("<path to docker-machine>\docker-machine.exe" env YOUR_VM_NAME)`. This will configure the correct environment variables for working seemlessly with the docker cli tools moving forward.
 
 From your local Docker client you should now be able to run `docker info` and see details about the Azure VM. 

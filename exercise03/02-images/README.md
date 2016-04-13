@@ -41,9 +41,25 @@ $ docker run -t -i ubuntu:14.04 /bin/bash
 $ docker run -t -i ubuntu:12.04 /bin/bash
 ```
 
+>If you're getting an error like `cannot enable tty mode on non tty input`- just prepend the command with `winpty` yielding:
+```
+$ winpty docker run -i -t ubuntu:14.04 /bin/bash
+$ winpty docker run -i -t ubuntu:12.04 /bin/bash
+```
+
+>Depending on the bash solution you're using, you might get an error like this: `Container command not found or does not exist`
+>If this is the case, it is basically trying to resolve the path locally before sending it to the server - resulting in it not finding bash at all. 
+>The easy fix to this is just to enter `bash`instead of `/bin/bash`
+```
+$ winpty docker run -i -t ubuntu:14.04 bash
+$ winpty docker run -i -t ubuntu:12.04 bash
+```
+
+
 *If you don't have a given image or a given tag (version) of an image when running it with the above command it will be pulled down automatically.*
 
 > Its recommended by Docker to always use a specific tagged image, for example `ubuntu:12.04`. That way you always know exactly what variant of an image is being used.
+
 
 ##Finding images
 
@@ -68,6 +84,15 @@ We can now run the image on our Azure VM or locally within our virtual machine (
 $ docker run -t -i microsoft/aspnet /bin/bash
 ```
 
+>Worst case scenario, depending on your bash - you might end up having to write:
+```
+$ winpty docker run -t -i microsoft/aspnet bash
+```
+> There is also the odd chance of getting an error from docker telling:
+> `docker: Error parsing reference: "microsoft\\aspnet" is not a valid repository/tag`
+> In this case we can either reference the image by its ID, which can be found using `docker images` or providing an alias by doing `docker tag microsoft/aspnet aspnet` giving it an alias of `aspnet`
+
+
 ##Updating an image
 
 There are two ways of updating an image. We can either create a 
@@ -86,16 +111,27 @@ root@0b2616b0e5a8:/#
 
 >**Note:** Take note of the container ID that has been created, `0b2616b0e5a8`, as we'll need it in a moment (this is the short id of the container).
 
-Inside our running container we can add a few files or install something using `apt-get`. 
+Inside our running container we can add a file or install something using `apt-get`. 
 For simplicity we'll just create a few files, and once that is done we'll exit our container using the `exit` command.
+
+Execute the following:
+
+```
+root@0b2616b0e5a8:/# echo {} > something.json
+```
+
+Detach the TTY without exiting the shell, use the escape sequence `Ctrl-p` + `Ctrl-q`. 
+The container will continue to exist in a stopped state once exited.
 
 Now that we have an image with the few changes that we made. 
 We can then commit a copy of this container to an image using 
 the `docker commit` command.
 
+ 
+
 ```
-$ docker commit -m "Added json files" -a "Morten Christensen" \
-0b2616b0e5a8 ouruser/aspnet:v2
+$ docker commit -m "Added json files" -a "YOUR NAME" \
+0b2616b0e5a8 aspnet:v2
 4f177bd27a9ff0f6dc2a830403925b5360bfe0b93d476f7fc3231110e7f71b1c
 ```
 
@@ -107,16 +143,18 @@ We've also specified the container we want to create this new image from,
 `0b2616b0e5a8` (the Id we noted earlier) and we've specified a target for the image as well:
 
 ```
-ouruser/aspnet:v2
+aspnet:v2
 ```
 
 Now, lets list our images again using the `docker images` command. 
 The list should now contain the image that was pulled and our updated version under "ouruser".
 
-You can run this image with the following command and verify that the added files are in fact there.
+You can run this image with the following command and verify that the added file is in fact there.
 
 ```
-$ docker run -t -i ouruser/aspnet:v2 /bin/bash
+$ docker run -t -i aspnet:v2 /bin/bash
+root@c1ffa2acca71:/# ls -l something.json
+-rw-r--r-- 1 root root 3 Apr 13 12:12 something.json
 ```
 
 ##Remove an image from the host
@@ -126,5 +164,5 @@ You can remove any images from your host as desired using the `docker rmi` comma
 In the following example we'll remove the `aspnet` image we created before.
 
 ```
-$ docker rmi ouruser/aspnet
+$ docker rmi aspnet
 ```
