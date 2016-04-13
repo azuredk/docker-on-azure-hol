@@ -37,6 +37,19 @@ To detach the TTY without exiting the shell, use the escape sequence `Ctrl-p` + 
 The container will continue to exist in a stopped state once exited. 
 To list all containers, stopped and running use the `docker ps -a` command.
 
+>If you're getting an error like `cannot enable tty mode on non tty input`- just prepend the command with `winpty` yielding:
+```
+$ winpty docker run -i -t ubuntu /bin/bash
+```
+
+>Depending on the bash solution you're using, you might get an error like this: `Container command not found or does not exist`
+>If this is the case, it is basically trying to resolve the path locally before sending it to the server - resulting in it not finding bash at all. 
+>The easy fix to this is just to enter `bash`instead of `/bin/bash`
+```
+$ winpty docker run -i -t ubuntu bash
+```
+
+
 ## Controlling a container
 
 In the example below we'll assign a variable to work against a specific container
