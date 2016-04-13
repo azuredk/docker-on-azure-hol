@@ -41,9 +41,25 @@ $ docker run -t -i ubuntu:14.04 /bin/bash
 $ docker run -t -i ubuntu:12.04 /bin/bash
 ```
 
+>If you're getting an error like `cannot enable tty mode on non tty input`- just prepend the command with `winpty` yielding:
+```
+$ winpty docker run -i -t ubuntu:14.04 /bin/bash
+$ winpty docker run -i -t ubuntu:12.04 /bin/bash
+```
+
+>Depending on the bash solution you're using, you might get an error like this: `Container command not found or does not exist`
+>If this is the case, it is basically trying to resolve the path locally before sending it to the server - resulting in it not finding bash at all. 
+>The easy fix to this is just to enter `bash`instead of `/bin/bash`
+```
+$ winpty docker run -i -t ubuntu:14.04 bash
+$ winpty docker run -i -t ubuntu:12.04 bash
+```
+
+
 *If you don't have a given image or a given tag (version) of an image when running it with the above command it will be pulled down automatically.*
 
 > Its recommended by Docker to always use a specific tagged image, for example `ubuntu:12.04`. That way you always know exactly what variant of an image is being used.
+
 
 ##Finding images
 
@@ -67,6 +83,15 @@ We can now run the image on our Azure VM or locally within our virtual machine (
 ```
 $ docker run -t -i microsoft/aspnet /bin/bash
 ```
+
+>Worst case scenario, depending on your bash - you might end up having to write:
+```
+$ winpty docker run -t -i microsoft/aspnet bash
+```
+> There is also the odd chance of getting an error from docker telling:
+> `docker: Error parsing reference: "microsoft\\aspnet" is not a valid repository/tag`
+> In this case we can either reference the image by its ID, which can be found using `docker images` or providing an alias by doing `docker tag microsoft/aspnet aspnet` giving it an alias of `aspnet`
+
 
 ##Updating an image
 
