@@ -15,6 +15,8 @@ To bypass this prompt for automation scenarios, use the `-q` parameter with the 
 To log out, use the following command: `azure logout -u <username>`
 
 This login option only works for Microsoft organizational accounts and service principals, so if your login fails you'll need to set your account in a different way.
+By just using `azure login` without the option of a username, you'll be asked to navigate to (devicelogin)[http://aka.ms/devicelogin) and enter a one-time-password.
+
 Run the following commands to first download a `publishingsettings` file for your azure account, and then import it.
 ```
 $ azure account download
@@ -28,6 +30,7 @@ So its a good idea to ensure that the correct account is active before issueing 
 Also note that the import command will take the file from the current folder unless you specify an absolute path.
 
 Once you have imported the `publishingsettings` file you should ensure that the correct subscription is selected, so follow the instructions in the following section to set the correct subscription.
+
 
 ##Commands
 
