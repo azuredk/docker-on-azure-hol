@@ -109,7 +109,7 @@ Error creating machine: Error detecting OS: Error getting SSH command: Something
 You need to regenerate the certificates for the machine by running:
 
 ```
-docker-machine regenerate-certs (YOUR_VM_NAME)
+docker-machine regenerate-certs YOUR_VM_NAME
 ```
 
 This should yield the following:
@@ -125,9 +125,29 @@ Copying certs to the remote machine...
 Setting Docker configuration on the remote daemon...
 ```
 
+To be able to connect to the docker machine we need to get the environment variables that will point to the new Docker machine.
+To see the environment variables, you can run the following:
 
+```
+docker-machine env YOUR_VM_NAME
+``` 
 
-Please note the last line with `<path to docker-machine>\docker-machine.exe env YOUR_VM_NAME`, which is what we'll use to set access to the newly created VM from the current terminal session (command prompt).
-Prepend eval and run it as follows: `eval $("<path to docker-machine>\docker-machine.exe" env YOUR_VM_NAME)`. This will configure the correct environment variables for working seemlessly with the docker cli tools moving forward.
+This should yield something like this:
+
+```
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://<IP ADDRESS>:2376"
+export DOCKER_CERT_PATH="/root/.docker/machine/machines/YOUR_VM_NAME"
+export DOCKER_MACHINE_NAME="YOUR_VM_NAME"
+# Run this command to configure your shell:
+# eval $(docker-machine env YOUR_VM_NAME)
+```
+
+You can then do, as it says on the last comment of the output:
+
+```
+
+eval $(docker-machine env YOUR_VM_NAME)
+```
 
 From your local Docker client you should now be able to run `docker info` and see details about the Azure VM. 
