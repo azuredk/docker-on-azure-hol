@@ -7,6 +7,10 @@ The easiest way to verify that the Docker host is running and functional on Azur
 ```
 $  docker run busybox echo hello world
 ```
+
+>Note: If you're using the VM created using the Azure CLI in Excercise 03 - you will need to add the --tls option right after `docker` 
+
+
 The output will look something like this
 ```
     Unable to find image 'busybox:latest' locally
@@ -30,12 +34,22 @@ The `-d` flag will ensure that the container runs in the background continuously
 The nginx image will by default expose port 80 and 443, because of the `EXPOSE` instruction within the image.
 The `-P` flag will have Docker assign random ports to the container, so both port 80 and 443 will be exposed externally.
 
+If you want to specify the public ports directly, so you don't get random public ports assigned you need to run it as follows
+```
+$ docker run --name machinenginx -p 80:80 -p 443:443 -d nginx
+```
+
+The 80:80 and 443:443 syntax is specifying the public port mapped to the private port (public:private).
+
+
 You can verify that the ports have been mapped by running the `docker ps -a` command. The output should look similar to the following:
 ```
 IMAGE               PORTS
 nginx:latest        0.0.0.0:49153->80/tcp, 0.0.0.0:49154->443/tcp
 busybox:latest
 ```
+
+
 One thing to note about this is that these port will not be opened by Azure on the VM itself, so we need to do that as extra step in order to access nginx on port 80.
 
 Using the Azure CLI we can run the following command to open public port 80 to port 49153 on the VM. Docker then ensures that inbound tcp traffic on VM port 49153 is routed to the nginx container.
