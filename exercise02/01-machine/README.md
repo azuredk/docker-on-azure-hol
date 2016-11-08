@@ -45,7 +45,6 @@ Here is a list of environment variables and default values
 | `--azure-publish-settings-file` | AZURE_PUBLISH_SETTINGS_FILE | -                      |
 | `--azure-size`                  | AZURE_SIZE                  | Small                  |
 | `--azure-ssh-port`              | -                           | 22                     |
-| `--azure-subscription-cert`     | AZURE_SUBSCRIPTION_CERT     | -                      |
 | `--azure-subscription-id`       | AZURE_SUBSCRIPTION_ID       | -                      |
 | `--azure-username`              | -                           | ubuntu                 |
 
