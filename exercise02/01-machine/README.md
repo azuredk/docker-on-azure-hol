@@ -5,8 +5,10 @@ Machine lets you create Docker hosts on your local computer through [Hyper-V](ht
 ## Preparing
 
 If you haven't already downloaded Docker Machine, you can find the Docker Machine binaries on the github page for Machine [https://github.com/docker/machine/releases](https://github.com/docker/machine/releases).
-Download `docker-machine_windows-386.exe` or `docker-machine_windows-amd64.exe` (unblock if necessary), rename it to `docker-machine.exe` and put it in the same folder as the `docker.exe` on your local machine, 
+Download `docker-machine_windows-386.exe` or `docker-machine_windows-amd64.exe` (unblock if necessary), rename it to `docker-machine.exe` and put it in the same folder as the `docker.exe` on your local machine,
 so that it will part of the PATH variable that should already configured.
+
+If you have installed Docker on your computer, it is also included in the package - chances are you already have it installed.
 
 Once that is done we need the subscription id for the subscription you want to create a Docker VM.
 Go to the [portal](http://portal.azure.com) and navigate to subscriptions:
@@ -53,7 +55,12 @@ Here is a list of some of the CLI options and environment variables and their de
 
 Given this information we can refine our creation, so we set the location and the size of the VM.
 
-In the following command we add "West Europe" as the location, and set "Medium" as the size of our VM.
+VM size is important when creating this, you'll find what sizes are available in your region [here](https://aka.ms/azure-regions).
+You can also find details about what every size means [here](https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs).
+
+Lets chose a medium sizes VM with 2 CPU cores and 7GiB of memory; Standard_D2.
+
+In the following command we add "West Europe" as the location, and set "Stabdard_D2" as the size of our VM.
 
 > Name of virtual name must be unique - globally. It is in fact the DNS name you're specifying.
 > Since it also is the DNS name, you must be aware that it should be lower case
@@ -65,8 +72,6 @@ $ docker-machine create -d azure --azure-subscription-cert="mycert.pem" --azure-
 Docker machine needs a certificate from Azure to be able to do this, and it will ask you to log in to the devicelogin and give it a one-time-password.
 
 ```cli
-Creating CA: /root/.docker/machine/certs/ca.pem
-Creating client certificate: /root/.docker/machine/certs/cert.pem
 Running pre-create checks...
 (YOUR_VM_NAME) Microsoft Azure: To sign in, use a web browser to open the page https://aka.ms/devicelogin. Enter the code {A OTP} to authenticate.
 (workdock) Completed machine pre-create checks.
@@ -105,13 +110,15 @@ BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
 UBUNTU_CODENAME=xenial
 ```
 
+> As you can see from the output, it will if not specified, create everything in a resource group called `docker-machine`
+
 If you get the following error during the creation like below (the error is probably in the middle of the process - it won't affect the creation)
 
 ```cli
 Error creating machine: Error detecting OS: Error getting SSH command: Something went wrong running an SSH command!
 ```
 
-You need to regenerate the certificates for the machine by running:
+In case you get the problem above, you need to regenerate the certificates for the machine by running:
 
 ```cli
 docker-machine regenerate-certs YOUR_VM_NAME
@@ -154,4 +161,14 @@ You can then do, as it says on the last comment of the output:
 eval $(docker-machine env YOUR_VM_NAME)
 ```
 
-From your local Docker client you should now be able to run `docker info` and see details about the Azure VM. 
+If you're running Windows CLI, you will have to do the following:
+
+```cli
+@FOR /f "tokens=*" %i IN ('docker-machine env YOUR_VM_NAME') DO @%i
+```
+
+From your local Docker client you should now be able to run `docker info` and see details about the Azure VM.
+
+> If you're running version 1.13.1 of Docker on Windows, you might get the following warning:  
+> time="2017-02-21T11:58:29Z" level=info msg="Unable to use system certificate pool: crypto/x509: system root pool is not available on Windows"  
+> You can safely ignore it
