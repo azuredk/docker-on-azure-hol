@@ -37,7 +37,7 @@ The `-d` flag is short-hand for driver, and is the part that tells Machine that 
 
 >You can find all the subcommands in the [Docker Machine subcommands](https://docs.docker.com/machine/reference/) reference documentation.
 
-Here is a list of environment variables and default values
+Here is a list of some of the CLI options and environment variables and their default values
 
 | CLI option                      | Environment variable        | Default                |
 |:--------------------------------| ----------------------------| -----------------------|
@@ -55,7 +55,6 @@ Given this information we can refine our creation, so we set the location and th
 
 In the following command we add "West Europe" as the location, and set "Medium" as the size of our VM.
 
-> [!Note]
 > Name of virtual name must be unique - globally. It is in fact the DNS name you're specifying.
 > Since it also is the DNS name, you must be aware that it should be lower case
 
