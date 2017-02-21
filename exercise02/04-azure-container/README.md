@@ -127,7 +127,25 @@ data:    Priority                        : 1000
 info:    network nsg rule create command OK
 ```
 
+We need the public IP address to be able to test that everything is working, you can get it from the portal or use the Azure CLI as well.
 
-Open a browser and go to pmachine-name.cloudapp.net url and you should see the nginx welcome page.
+```cli
+$ azure vm list-ip-address -g {RESOURCE GROUP}
+```
+
+It should yield the following:
+
+```cli
+info:    Executing command vm list-ip-address
++ Getting virtual machines
++ Looking up the NIC "{VM NAME}-nic"
++ Looking up the public ip "{VM NAME}-ip"
+data:    Resource Group   Name              Public IP Address
+data:    ---------------  ----------------  -----------------
+data:    {RESOURCE GROUP} {VM NAME}         {IP ADDRESS}
+info:    vm list-ip-address command OK
+```
+
+Open a browser and go to `http://{IP ADDRESS}` and you should see the nginx welcome page.
 
 That's it for now. You can of course stop and remove these containers and images as we won't be using them again.
