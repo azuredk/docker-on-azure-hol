@@ -58,21 +58,20 @@ $ docker run -t -i ouruser/sinatra:v2 /bin/bash
 
 A good way of learning more about how a Dockerfile can be used to build your own image, is to browse the [Docker Hub](https://hub.docker.com) and inspect the Dockerfile that is available for all public repos.
 
-Lets look at a base Dockerfile for [aspnet](https://hub.docker.com/r/microsoft/aspnetcore/), which is available on [github](https://github.com/aspnet/aspnet-docker/tree/master/1.0.1/jessie/product).
+Lets look at a base Dockerfile for [aspnet](https://hub.docker.com/r/microsoft/aspnetcore/), which is available on [github](https://github.com/aspnet/aspnet-docker).
 
-```
+```dockerfile
 # base
-FROM microsoft/dotnet:1.0.1-core
-
-# set up package cache
-RUN curl -o /tmp/packagescache.tar.gz http://dist.asp.net/packagecache/aspnetcore.packagecache-1.0.1-debian.8-x64.tar.gz && \
-    mkdir /packagescache && cd /packagescache && \
-    tar xvf /tmp/packagescache.tar.gz && \
-    rm /tmp/packagescache.tar.gz && \
-    cd /
+FROM microsoft/dotnet:1.1.0-runtime
 
 # set env var for packages cache
 ENV DOTNET_HOSTING_OPTIMIZATION_CACHE /packagescache
+
+COPY ./build-cache.sh /packagescache/build-cache.sh
+
+# set up package cache
+RUN /packagescache/build-cache.sh https://dist.asp.net/packagecache/1.1.0/aspnetcore.packagecache-1.1.0-legacy-debian.8-x64.tar.gz \
+    && rm /packagescache/build-cache.sh
 
 # set up network
 ENV ASPNETCORE_URLS http://+:80
@@ -82,4 +81,3 @@ As you can see its built `FROM` Microsoft .NET Core image. Then it downloads ASP
 Then it exposes an environment variable for using the `packagescache`.
 
 Lastly it sets an environment variable for the URLs it will expose.
- 
