@@ -24,7 +24,6 @@ Now everything should be in place for actually creating a virtual machine on Azu
 
 The shortest form of creating a virtual machine on Azure is using the following command, but please note that it will use a lot of defaults
 
-> [!Note]
 > Name of virtual name must be unique - globally. It is in fact the DNS name you're specifying.
 > Since it also is the DNS name, you must be aware that it should be lower case
 
