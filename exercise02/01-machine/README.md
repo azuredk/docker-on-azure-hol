@@ -1,8 +1,8 @@
-#Docker Machine
+# Docker Machine
 
 Machine lets you create Docker hosts on your local computer through [Hyper-V](https://docs.docker.com/machine/drivers/hyper-v) or [VirtualBox](https://docs.docker.com/machine/drivers/virtualbox), and on range of different cloud providers - which of course includes [Azure](https://docs.docker.com/machine/drivers/azure).
 
-##Preparing
+## Preparing
 
 If you haven't already downloaded Docker Machine, you can find the Docker Machine binaries on the github page for Machine [https://github.com/docker/machine/releases](https://github.com/docker/machine/releases).
 Download `docker-machine_windows-386.exe` or `docker-machine_windows-amd64.exe` (unblock if necessary), rename it to `docker-machine.exe` and put it in the same folder as the `docker.exe` on your local machine, 
@@ -18,13 +18,17 @@ Then, find the subscription you want and copy the id:
 ![](SubscriptionsView.png)
 
 
-##Using Docker Machine to create an Azure VM
+## Using Docker Machine to create an Azure VM
 
-Now everything should be in place for actually creating a virtual machine on Azure using `docker-machine.exe`.
+Now everything should be in place for actually creating a virtual machine on Azure using `docker-machine`.
 
 The shortest form of creating a virtual machine on Azure is using the following command, but please note that it will use a lot of defaults
 
-```
+> [!Note]
+> Name of virtual name must be unique - globally. It is in fact the DNS name you're specifying.
+> Since it also is the DNS name, you must be aware that it should be lower case
+
+```cli
 $ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-location="LOCATION" A-UNIQUE-NAME-FOR-YOUR-VM
 ```
 
@@ -51,13 +55,18 @@ Here is a list of environment variables and default values
 Given this information we can refine our creation, so we set the location and the size of the VM.
 
 In the following command we add "West Europe" as the location, and set "Medium" as the size of our VM.
-```
+
+> [!Note]
+> Name of virtual name must be unique - globally. It is in fact the DNS name you're specifying.
+> Since it also is the DNS name, you must be aware that it should be lower case
+
+```cli
 $ docker-machine create -d azure --azure-subscription-cert="mycert.pem" --azure-location="West Europe" --azure-size="Medium" A-UNIQUE-NAME-FOR-YOUR-VM
 ```
 
 Docker machine needs a certificate from Azure to be able to do this, and it will ask you to log in to the devicelogin and give it a one-time-password.
 
-```
+```cli
 Creating CA: /root/.docker/machine/certs/ca.pem
 Creating client certificate: /root/.docker/machine/certs/cert.pem
 Running pre-create checks...
@@ -67,7 +76,7 @@ Running pre-create checks...
 
 After this, it will start creating the VM:
 
-```
+```cli
 Creating machine...
 (YOUR_VM_NAME) Querying existing resource group.  name="docker-machine"
 (YOUR_VM_NAME) Creating resource group.  location="North Europe" name="docker-machine"
@@ -99,19 +108,20 @@ UBUNTU_CODENAME=xenial
 ```
 
 If you get the following error during the creation like below (the error is probably in the middle of the process - it won't affect the creation)
-```
+
+```cli
 Error creating machine: Error detecting OS: Error getting SSH command: Something went wrong running an SSH command!
 ```
 
 You need to regenerate the certificates for the machine by running:
 
-```
+```cli
 docker-machine regenerate-certs YOUR_VM_NAME
 ```
 
 This should yield the following:
 
-```
+```cli
 Regenerate TLS machine certs?  Warning: this is irreversible. (y/n): y
 Regenerating TLS certificates
 Waiting for SSH to be available...
@@ -125,13 +135,13 @@ Setting Docker configuration on the remote daemon...
 To be able to connect to the docker machine we need to get the environment variables that will point to the new Docker machine.
 To see the environment variables, you can run the following:
 
-```
+```cli
 docker-machine env YOUR_VM_NAME
-``` 
+```
 
 This should yield something like this:
 
-```
+```cli
 export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://<IP ADDRESS>:2376"
 export DOCKER_CERT_PATH="/root/.docker/machine/machines/YOUR_VM_NAME"
@@ -142,8 +152,7 @@ export DOCKER_MACHINE_NAME="YOUR_VM_NAME"
 
 You can then do, as it says on the last comment of the output:
 
-```
-
+```cli
 eval $(docker-machine env YOUR_VM_NAME)
 ```
 
