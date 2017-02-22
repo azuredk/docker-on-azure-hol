@@ -63,34 +63,34 @@ $ winpty docker run -i -t ubuntu:12.04 bash
 
 ##Finding images
 
-You can find images on the [Docker Hub](https://hub.docker.com/) website. Here you can browse and search official repositories for images such as [Ubuntu](https://hub.docker.com/_/ubuntu/), [NodeJs](https://hub.docker.com/_/node/) and of course [ASP.NET 5](https://hub.docker.com/r/microsoft/aspnet/) as well.
+You can find images on the [Docker Hub](https://hub.docker.com/) website. Here you can browse and search official repositories for images such as [Ubuntu](https://hub.docker.com/_/ubuntu/), [NodeJs](https://hub.docker.com/_/node/) and of course [ASP.NET Core](https://hub.docker.com/r/microsoft/aspnetcore/) as well.
 
 You can also search for images on the command line using the `docker search` command.
 
 ```
-$ docker search aspnet 
+$ docker search aspnetcore 
 ```
 
 ##Pulling our image
 
-If we wanted to pull down the official Microsoft ASP.NET 5 image we could use the following command:
+If we wanted to pull down the official Microsoft ASP.NET Core image we could use the following command:
 
 ```
-$ docker pull microsoft/aspnet
+$ docker pull microsoft/aspnetcore
 ```
 
 We can now run the image on our Azure VM or locally within our virtual machine (from the private lab) like so:
 ```
-$ docker run -t -i microsoft/aspnet /bin/bash
+$ docker run -t -i microsoft/aspnetcore /bin/bash
 ```
 
 >Worst case scenario, depending on your bash - you might end up having to write:
 ```
-$ winpty docker run -t -i microsoft/aspnet bash
+$ winpty docker run -t -i microsoft/aspnetcore bash
 ```
 > There is also the odd chance of getting an error from docker telling:
 > `docker: Error parsing reference: "microsoft\\aspnet" is not a valid repository/tag`
-> In this case we can either reference the image by its ID, which can be found using `docker images` or providing an alias by doing `docker tag microsoft/aspnet aspnet` giving it an alias of `aspnet`
+> In this case we can either reference the image by its ID, which can be found using `docker images` or providing an alias by doing `docker tag microsoft/aspnetcore aspnet` giving it an alias of `aspnet`
 
 
 ##Updating an image
@@ -105,7 +105,7 @@ To update an image we first need to create a container from the
 image we'd like to update.
 
 ```
-$ docker run -t -i microsoft/aspnet /bin/bash
+$ docker run -t -i microsoft/aspnetcore /bin/bash
 root@0b2616b0e5a8:/#
 ```
 
@@ -131,7 +131,7 @@ the `docker commit` command.
 
 ```
 $ docker commit -m "Added json files" -a "YOUR NAME" \
-0b2616b0e5a8 aspnet:v2
+0b2616b0e5a8 aspnetcore:v2
 4f177bd27a9ff0f6dc2a830403925b5360bfe0b93d476f7fc3231110e7f71b1c
 ```
 
@@ -143,7 +143,7 @@ We've also specified the container we want to create this new image from,
 `0b2616b0e5a8` (the Id we noted earlier) and we've specified a target for the image as well:
 
 ```
-aspnet:v2
+aspnetcore:v2
 ```
 
 Now, lets list our images again using the `docker images` command. 
@@ -152,7 +152,7 @@ The list should now contain the image that was pulled and our updated version un
 You can run this image with the following command and verify that the added file is in fact there.
 
 ```
-$ docker run -t -i aspnet:v2 /bin/bash
+$ docker run -t -i aspnetcore:v2 /bin/bash
 root@c1ffa2acca71:/# ls -l something.json
 -rw-r--r-- 1 root root 3 Apr 13 12:12 something.json
 ```
@@ -161,8 +161,8 @@ root@c1ffa2acca71:/# ls -l something.json
 
 You can remove any images from your host as desired using the `docker rmi` command.
 
-In the following example we'll remove the `aspnet` image we created before.
+In the following example we'll remove the `aspnetcore` image we created before.
 
 ```
-$ docker rmi aspnet
+$ docker rmi aspnetcore
 ```

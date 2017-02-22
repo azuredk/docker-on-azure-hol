@@ -17,7 +17,7 @@ Before we run the command to start a registry container in our Azure VM, we need
 
 Using the Azure CLI we can run the following command to create a new storage account
 ```
-$ azure storage account create -l "North Europe" <storage-account-name>
+$ azure storage account create --type LRS -l "North Europe" <storage-account-name>
 ```
 Once its created we need to run the following command to list the keys, as we need one of them when creating the registry.
 ```
@@ -41,7 +41,7 @@ $ docker run -d -p 5000:5000 \
 
 Once the command exits, you can see the container hosting your private Docker Registry instance by running the `docker ps` command on your host.
 
-Remember that port 5000, which is used for the registry container, isn't really open until you open it on the VM in Azure. 
+If you're running the container in Azure, remember that port 5000, which is used for the registry container, isn't really open until you open it on the VM in Azure. 
 So if you want to be able to access it through the <machine-name>.cloudapp.net:5000 address you need to open the port.
 
 We can open a port on our Azure virtual machine using the Azure CLI and the following command

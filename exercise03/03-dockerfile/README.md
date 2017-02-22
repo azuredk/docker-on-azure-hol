@@ -54,45 +54,30 @@ When the build process is done you can run the newly created image with the foll
 $ docker run -t -i ouruser/sinatra:v2 /bin/bash
 ``` 
 
-##Dockerfile for ASP.NET 5 beta 6
+##Dockerfile for ASP.NET Core
 
 A good way of learning more about how a Dockerfile can be used to build your own image, is to browse the [Docker Hub](https://hub.docker.com) and inspect the Dockerfile that is available for all public repos.
 
-Lets look at the Dockerfile for [aspnet](https://hub.docker.com/r/microsoft/aspnet/), which is available on [github](https://github.com/aspnet/aspnet-docker/blob/master/1.0.0-beta6/Dockerfile) (this one is for beta6).
+Lets look at a base Dockerfile for [aspnet](https://hub.docker.com/r/microsoft/aspnetcore/), which is available on [github](https://github.com/aspnet/aspnet-docker).
 
-```
-FROM mono:4.0.1
+```dockerfile
+# base
+FROM microsoft/dotnet:1.1.0-runtime
 
-ENV DNX_VERSION 1.0.0-beta6
-ENV DNX_USER_HOME /opt/dnx
+# set env var for packages cache
+ENV DOTNET_HOSTING_OPTIMIZATION_CACHE /packagescache
 
-RUN apt-get -qq update && apt-get -qqy install unzip
+COPY ./build-cache.sh /packagescache/build-cache.sh
 
-RUN curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_USER_HOME=$DNX_USER_HOME DNX_BRANCH=v$DNX_VERSION sh
-RUN bash -c "source $DNX_USER_HOME/dnvm/dnvm.sh \
-	&& dnvm install $DNX_VERSION -a default \
-	&& dnvm alias default | xargs -i ln -s $DNX_USER_HOME/runtimes/{} $DNX_USER_HOME/runtimes/default"
+# set up package cache
+RUN /packagescache/build-cache.sh https://dist.asp.net/packagecache/1.1.0/aspnetcore.packagecache-1.1.0-legacy-debian.8-x64.tar.gz \
+    && rm /packagescache/build-cache.sh
 
-# Install libuv for Kestrel from source code (binary is not in wheezy and one in jessie is still too old)
-RUN apt-get -qqy install \
-	autoconf \
-	automake \
-	build-essential \
-	libtool
-RUN LIBUV_VERSION=1.4.2 \
-	&& curl -sSL https://github.com/libuv/libuv/archive/v${LIBUV_VERSION}.tar.gz | tar zxfv - -C /usr/local/src \
-	&& cd /usr/local/src/libuv-$LIBUV_VERSION \
-	&& sh autogen.sh && ./configure && make && make install \
-	&& rm -rf /usr/local/src/libuv-$LIBUV_VERSION \
-	&& ldconfig
-
-ENV PATH $PATH:$DNX_USER_HOME/runtimes/default/bin
+# set up network
+ENV ASPNETCORE_URLS http://+:80
 ```
 
-As you can see its built `FROM` the mono 4.0.1 image. Then it sets two environment varibles using the `ENV` instruction.
-And as we've seen before it uses `RUN` multiple times. In this case it starts off by updating the APT cache, installing the unzip package, 
-then downloads a shell script for installing the DNVM (DotNet Version Manager), and then runs a bash command.
+As you can see its built `FROM` Microsoft .NET Core image. Then it downloads ASP.NET Core and puts it all into a `packagescache` folder.
+Then it exposes an environment variable for using the `packagescache`.
 
-In the two next `RUN` instructions it gets and installs libuv, which is used for Kestrel. Lastly, it sets another environment variable.
-
-In one of the later exercises we'll look at creating a new image for an ASP.NET 5 site, which is based on this `aspnet` image, in order to run an ASP.NET 5 site in a Docker container. 
+Lastly it sets an environment variable for the URLs it will expose.
