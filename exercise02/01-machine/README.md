@@ -66,7 +66,7 @@ In the following command we add "West Europe" as the location, and set "Stabdard
 > Since it also is the DNS name, you must be aware that it should be lower case
 
 ```cli
-$ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-location="West Europe" --azure-size="Medium" A-UNIQUE-NAME-FOR-YOUR-VM
+$ docker-machine create -d azure --azure-subscription-id="SUB_ID" --azure-location="West Europe" --azure-size="Standard_D2" A-UNIQUE-NAME-FOR-YOUR-VM
 ```
 
 Docker machine needs a certificate from Azure to be able to do this, and it will ask you to log in to the devicelogin and give it a one-time-password.
