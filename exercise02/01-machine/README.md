@@ -60,7 +60,7 @@ You can also find details about what every size means [here](https://docs.micros
 
 Lets chose a medium sizes VM with 2 CPU cores and 7GiB of memory; Standard_D2.
 
-In the following command we add "West Europe" as the location, and set "Stabdard_D2" as the size of our VM.
+In the following command we add "West Europe" as the location, and set "Standard_D2" as the size of our VM.
 
 > Name of virtual name must be unique - globally. It is in fact the DNS name you're specifying.
 > Since it also is the DNS name, you must be aware that it should be lower case
