@@ -67,7 +67,7 @@ busybox:latest
 To simplify it all, lets use standard ports (80, 443). By just running without specifying ports, it will use the defaults.
 
 ```cli
-$ docker run --name machinenginx -d nginx
+$ docker run --name machinenginx -p 80:80 -p 443:443 -d nginx
 ```
 
 One thing to note about this is that these port will not be opened by Azure on the VM itself, so we need to do that as extra step in order to access nginx on port 80.
@@ -88,6 +88,31 @@ info:    To sign in, use a web browser to open the page https://aka.ms/devicelog
 ```
 
 Follow the instructions and go to [https://aka.ms/devicelogin](https://aka.ms/devicelogin) and enter the code and authenticate.
+
+To make sure you're using the correct subscription, if you have multiple subscriptions you can list the subscriptions by using:
+
+```cli
+$ azure account list
+```
+
+You'll get something like the following
+
+
+```cli
+info:    Executing command account list
+data:    Name                                                              Id                                    Current  State
+data:    ----------------------------------------------------------------  ------------------------------------  -------  --------
+data:    [SOME SUBSCRIPTION]                                               00000000-0000-0000-0000-000000000000  true     Enabled
+data:    [SOME OTHER SUBSCRIPTION]                                         00000000-0000-0000-0000-000000000000  false    Enabled
+```
+
+You'll notice that one of these are set as the current - verify that it actually is the subscription you want to use.
+If it is not, you can change current by issuing the following command.
+
+```cli
+$ azure account set [SUBSCRIPTION ID]
+```
+
 
 >The port will probably be something else than 49153 - look at the output from `docker ps -a`command.
 
