@@ -67,7 +67,7 @@ busybox:latest
 To simplify it all, lets use standard ports (80, 443). By just running without specifying ports, it will use the defaults.
 
 ```cli
-$ docker run --name machinenginx -d nginx
+$ docker run --name machinenginx -p 80:80 -p 443:443 -d nginx
 ```
 
 One thing to note about this is that these port will not be opened by Azure on the VM itself, so we need to do that as extra step in order to access nginx on port 80.
