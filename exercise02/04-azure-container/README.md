@@ -89,6 +89,31 @@ info:    To sign in, use a web browser to open the page https://aka.ms/devicelog
 
 Follow the instructions and go to [https://aka.ms/devicelogin](https://aka.ms/devicelogin) and enter the code and authenticate.
 
+To make sure you're using the correct subscription, if you have multiple subscriptions you can list the subscriptions by using:
+
+```cli
+$ azure account list
+```
+
+You'll get something like the following
+
+
+```cli
+info:    Executing command account list
+data:    Name                                                              Id                                    Current  State
+data:    ----------------------------------------------------------------  ------------------------------------  -------  --------
+data:    [SOME SUBSCRIPTION]                                               00000000-0000-0000-0000-000000000000  true     Enabled
+data:    [SOME OTHER SUBSCRIPTION]                                         00000000-0000-0000-0000-000000000000  false    Enabled
+```
+
+You'll notice that one of these are set as the current - verify that it actually is the subscription you want to use.
+If it is not, you can change current by issuing the following command.
+
+```cli
+$ azure account set [SUBSCRIPTION ID]
+```
+
+
 >The port will probably be something else than 49153 - look at the output from `docker ps -a`command.
 
 The following command will open a port in the firewall
